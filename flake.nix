@@ -13,6 +13,9 @@
       in {
        devShell = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
+            dnsutils
+            docker
+            just
             terraform
             terraform-ls
           ];

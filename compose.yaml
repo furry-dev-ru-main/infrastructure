@@ -1,0 +1,34 @@
+services:
+  powerdns:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.pdns
+    ports:
+      - 8053:53/tcp
+      - 8053:53/udp
+      - 8081:8081
+    volumes:
+      - powerdns-data:/var/lib/powerdns
+    restart: on-failure:3
+
+  powerdns-admin:
+    image: powerdnsadmin/pda-legacy:latest
+    environment:
+      PDNS_API_URL: http://powerdns:8081/
+      SECRET_KEY: secret_api_key
+      PDNS_API_KEY: secret_api_key
+      PORT: 9191
+    ports:
+      - 8091:80
+    volumes:
+      - powerdns-admin-data:/data
+    depends_on:
+      - powerdns
+    restart: on-failure:3
+
+volumes:
+  powerdns-admin-data:
+    driver: local
+  powerdns-data:
+    driver: local
+

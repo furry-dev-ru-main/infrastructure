@@ -1,0 +1,32 @@
+FROM ubuntu:24.04
+
+ARG PDNS_VERSION="4.9.*"
+
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
+    sqlite3 \
+    software-properties-common
+
+COPY ./config/auth-49.pref /etc/apt/preferences.d/auth-49
+
+RUN install -d /etc/apt/keyrings
+RUN curl https://repo.powerdns.com/FD380FBB-pub.asc > /etc/apt/keyrings/auth-49-pub.asc
+RUN echo "deb [signed-by=/etc/apt/keyrings/auth-49-pub.asc] http://repo.powerdns.com/ubuntu noble-auth-49 main" \
+      > /etc/apt/sources.list.d/pdns.list
+
+RUN apt-get update && apt-get install -y \
+      pdns-server=${PDNS_VERSION} \
+      pdns-backend-sqlite3
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY ./config/pdns.conf /etc/powerdns/pdns.conf
+
+RUN mkdir -p /var/lib/powerdns
+RUN sqlite3 /var/lib/powerdns/pdns.sqlite3 < /usr/share/doc/pdns-backend-sqlite3/schema.sqlite3.sql
+
+EXPOSE 53/tcp 53/udp
+EXPOSE 8081
+
+ENTRYPOINT ["pdns_server"]
