@@ -1,9 +1,27 @@
 * Current
-  - (x) Docker image for setting up powerdns
-  - ( ) Infra for ovh cloud
+** Infra
+   - (x) docker image for setting up powerdns
+   - ( ) tf setup for ovh cloud
 
 * Later
-  - ( ) Grafana
+** Performance
+   - ( ) configure query cache
+   - ( ) receiver-threads
+   - ( ) reuseport
+   - ( ) rate-limiting
+   - ( ) configure max queue/max tcp connections/overload queue for powerdns
+** Security
+   - ( ) setup vpn for accessing admin (and any other dashboards)
+   - ( ) random api key + make it easy to invalidate
+   - ( ) dnssec
+   - ( ) configure proper auth for admin
+   - ( ) setuid/setgid
+   - ( ) version-string to anonymous
+   - ( ) unset allow-notify-from, allow-axfr-ips
+   - ( ) convert ANY udp calls to tcp
+** Monitoring
+   - ( ) grafana
+   - ( ) logging
 
 * Maybe
   - ( ) 

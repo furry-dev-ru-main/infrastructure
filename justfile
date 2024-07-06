@@ -1,8 +1,11 @@
 set positional-arguments
 
-local:
-  docker compose up --build
+up *args:
+  docker compose --profile development up --build "$@"
 
-dig *args='':
-  dig -p 8053 @localhost "$@"
+down *args:
+  docker compose down "$@"
+
+dig *args:
+  dig -p 53 @localhost "$@"
 
